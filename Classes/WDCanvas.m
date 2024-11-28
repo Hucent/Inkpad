@@ -38,7 +38,7 @@
 #define DEBUG_DIRTY_RECTS           NO
 
 NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
-
+NSString *WDCanvasBeganTouches = @"WDCanvasBeganTouches";
 @interface WDCanvas (Private)
 - (void) setTrueViewScale_:(float)scale;
 - (void) rebuildViewTransform_;
@@ -79,6 +79,7 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
     selectionView_ = [[WDSelectionView alloc] initWithFrame:self.bounds];
     [self addSubview:selectionView_];
     selectionView_.canvas = self;
+
     
     self.multipleTouchEnabled = YES;
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -163,6 +164,7 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
              object:self.drawingController];
     
     [self showRulers:drawing_.rulersVisible];
+    
     [self showTools];
     
     [self scaleDocumentToFit];
@@ -471,8 +473,8 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
 {
     if (!drawing_) {
         CGContextRef    ctx = UIGraphicsGetCurrentContext();
-        
-        CGContextSetRGBFillColor(ctx, 0.941f, 0.941f, 0.941f, 1.0f);
+        //UPDATE BY HUCENT show in transparent background
+        CGContextSetRGBFillColor(ctx, 0.941f, 0.941f, 0.941f, 0.0f);
         CGContextFillRect(ctx, self.bounds);
 
         return;
@@ -488,7 +490,7 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
     BOOL            outlineMode = drawing_.outlineMode;
     
 #ifdef WD_DEBUG
-    NSDate          *date = [NSDate date];
+//    NSDate          *date = [NSDate date];
 #endif
     
     if (DEBUG_DIRTY_RECTS) {
@@ -560,13 +562,13 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
         
         CGContextRestoreGState(ctx);
     }
-    
+
     [self drawDocumentBorder:ctx];
     
     CGContextRestoreGState(ctx);
 
 #ifdef WD_DEBUG
-    NSLog(@"Canvas render time: %f", -[date timeIntervalSinceNow]);
+//    NSLog(@"Canvas render time: %f", -[date timeIntervalSinceNow]);
 #endif
     
     // this needs to redraw too... do it at the end of the runloop to avoid an occassional flash after pinch zooming
@@ -729,6 +731,7 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
 
 - (void) touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event
 {
+
     NSSet *eventTouches = [event allTouches];
     
     [controller_ hidePopovers];
@@ -860,6 +863,7 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
     tools.canvas = self;
     
     CGRect frame = tools.frame;
+//    NSLog(@"Log Rect :");
     frame.size.height += [WDToolButton dimension] + 4;
     float bottom = CGRectGetHeight(tools.frame);
     
@@ -1032,9 +1036,9 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
 - (void) startActivity
 {
     if (!activityView_) {
-        [[NSBundle mainBundle] loadNibNamed:@"Activity" owner:self options:nil];
+        [[NSBundle bundleForClass:self.class] loadNibNamed:@"Activity" owner:self options:nil];
     }
-    
+
     activityView_.sharpCenter = WDCenterOfRect(self.bounds);
     [self addSubview:activityView_];
     
@@ -1144,6 +1148,12 @@ NSString *WDCanvasBeganTrackingTouches = @"WDCanvasBeganTrackingTouches";
                                                    selector:@selector(hideMessage:)
                                                    userInfo:nil
                                                     repeats:NO];
+}
+
+- (void)shouldFinish {
+//    [selectionView_ shouldFinish];
+    [selectionView_ removeFromSuperview];
+    selectionView_ = nil;
 }
 
 @end

@@ -351,7 +351,7 @@ NSString *WDShapeToolSpiralDecay = @"WDShapeToolSpiralDecay";
     }
     
     if (!optionsView_) {
-        [[NSBundle mainBundle] loadNibNamed:@"ShapeOptions" owner:self options:nil];
+        [[NSBundle bundleForClass:[WDShapeTool class]] loadNibNamed:@"ShapeOptions" owner:self options:nil];
         [self configureOptionsView:optionsView_];
         
         if (shapeMode_ == WDShapeRectangle) {

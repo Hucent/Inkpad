@@ -58,7 +58,7 @@ const NSInteger kThumbnailPadding = 12;
     
     self.selectedURLs = [NSMutableSet set];
     self.cachedThumbnails = [NSMutableDictionary dictionary];
-    self.sampleURLs = [[NSBundle mainBundle] URLsForResourcesWithExtension:@"inkpad" subdirectory:@"Samples"];
+    self.sampleURLs = [[NSBundle bundleForClass:[self class]] URLsForResourcesWithExtension:@"inkpad" subdirectory:@"Samples"];
     
     return self;
 }

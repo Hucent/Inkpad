@@ -68,6 +68,7 @@
 - (void) reversePathDirection;
 
 - (BOOL) canDeleteAnchors;
+- (void) deleteAnchors;
 - (void) deleteAnchor:(WDBezierNode *)node;
 - (NSArray *) selectedNodes;
 - (BOOL) anyNodesSelected;

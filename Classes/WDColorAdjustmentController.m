@@ -255,7 +255,7 @@
 - (void) runModalOverView:(UIView *)view
 {
     blockingView_ = [[WDBlockingView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+    id<UIApplicationDelegate> delegate = [UIApplication sharedApplication].delegate;
     
     blockingView_.passthroughViews = @[self.view];
 

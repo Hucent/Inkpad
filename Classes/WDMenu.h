@@ -22,7 +22,7 @@
 @property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic, assign) BOOL visible;
 @property (nonatomic, assign) CGPoint origin;
-@property (nonatomic, weak) UIPopoverController *popover;
+//@property (nonatomic, weak) UIPopoverController *popover;
 @property (nonatomic, weak) id delegate;
 
 - (id) initWithItems:(NSArray *)items;

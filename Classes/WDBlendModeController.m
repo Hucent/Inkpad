@@ -31,7 +31,7 @@
     }	
     
     self.title = NSLocalizedString(@"Blend Mode", @"Blend Mode");    
-	blendModeNames_ = [[NSArray alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"BlendModes" withExtension:@"plist"]];
+	blendModeNames_ = [[NSArray alloc] initWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"BlendModes" withExtension:@"plist"]];
     selectedRow_ = NSUIntegerMax;
     
     return self;

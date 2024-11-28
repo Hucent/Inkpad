@@ -40,7 +40,7 @@
     uniques_ = [NSMutableDictionary dictionary];
     definitions_ = [[WDXMLElement alloc] initWithName:@"defs"];
     images_ = [NSMutableDictionary dictionary];
-	NSArray *blendModeArray = [[NSArray alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"BlendModes" withExtension:@"plist"]];
+	NSArray *blendModeArray = [[NSArray alloc] initWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"BlendModes" withExtension:@"plist"]];
     blendModeNames_ = [NSMutableDictionary dictionary];
     for (NSDictionary *dict in blendModeArray) {
         blendModeNames_[dict[@"value"]] = dict[@"name"];

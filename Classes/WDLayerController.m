@@ -212,7 +212,7 @@
     WDLayerCell *cell = (WDLayerCell *) [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
     if (cell == nil) {
-        [[NSBundle mainBundle] loadNibNamed:@"LayerCell" owner:self options:nil];
+        [[NSBundle bundleForClass:[self class]] loadNibNamed:@"LayerCell" owner:self options:nil];
         cell = layerCell_;
         self.layerCell = nil;
     }

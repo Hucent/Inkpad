@@ -136,7 +136,7 @@ NSString *WDEraserToolSize = @"WDEraserToolSize";
 - (UIView *) optionsView
 {
     if (!optionsView_) {
-        [[NSBundle mainBundle] loadNibNamed:@"ShapeOptions" owner:self options:nil];
+        [[NSBundle bundleForClass:[self class]] loadNibNamed:@"ShapeOptions" owner:self options:nil];
         [self configureOptionsView:optionsView_];
         
         optionsSlider_.minimumValue = 1;

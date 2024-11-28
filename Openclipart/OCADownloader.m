@@ -48,11 +48,11 @@
     // use this to accumulate downloaded data
     self.data = [NSMutableData data];
     
-    // start downloading
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString_]];
-    connection_ = [NSURLConnection connectionWithRequest:request delegate:self];
-    [connection_ start];
-    
+//    // start downloading
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString_]];
+//    connection_ = [NSURLConnection connectionWithRequest:request delegate:self];
+//    [connection_ start];
+//
     return self;
 }
 

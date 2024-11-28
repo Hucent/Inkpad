@@ -29,7 +29,9 @@
 	NSMutableSet                        *itemsFailedImageLoading_;
 	BOOL                                isRoot_;
 	NSString                            *imageCacheDirectory_;
+    #ifdef DROPBOX
 	DBRestClient                        *dropboxClient_;
+#endif
 	NSFileManager                       *fileManager_;
 	
 }

@@ -29,7 +29,7 @@
     
     self.navigationItem.title = NSLocalizedString(@"Settings", @"Settings");
     
-    NSString *settingsPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Settings.plist"];
+    NSString *settingsPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"Settings.plist"];
     configuration_ = [NSArray arrayWithContentsOfFile:settingsPath];
     
     return self;
@@ -223,7 +223,7 @@
     
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [formatter setMaximumFractionDigits:2];
-    [formatter setRoundingMode:kCFNumberFormatterRoundCeiling];
+    [formatter setRoundingMode:(NSNumberFormatterRoundingMode)kCFNumberFormatterRoundCeiling];
     [formatter setUsesGroupingSeparator:NO];
     
     NSString *width = [formatter stringFromNumber:@(size.width / unit.conversionFactor)];

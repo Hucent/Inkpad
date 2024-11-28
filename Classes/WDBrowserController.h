@@ -45,11 +45,11 @@
     UIActivityIndicatorView *activityIndicator_;
     UIBarButtonItem         *activityItem_;
     UIBarButtonItem         *deleteItem_;
-    UIActionSheet           *deleteSheet_;
+    UIAlertController           *deleteSheet_;
     
     NSMutableSet            *selectedDrawings_;
     
-    UIPopoverController     *popoverController_;
+    UIPopoverPresentationController     *popoverController_;
     WDPageSizeController    *pageSizeController_;
     WDExportController      *exportController_;
 	WDImportController		*importController_;
@@ -58,8 +58,9 @@
     WDSamplesController     *samplesController_;
     WDActivityController    *activityController_;
     OCAViewController       *openClipArtController_;
-    
+#ifdef DROPBOX
     DBRestClient            *restClient_;
+#endif
     NSMutableSet            *filesBeingUploaded_;
     WDActivityManager       *activities_;
 

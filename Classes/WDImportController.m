@@ -40,7 +40,7 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
     static NSSet *imageFormats_ = nil;
     
     if (!imageFormats_) {
-        NSArray *temp = [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"ImportFormats" withExtension:@"plist"]];
+        NSArray *temp = [NSArray arrayWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"ImportFormats" withExtension:@"plist"]];
         imageFormats_ = [[NSSet alloc] initWithArray:temp];
     }
     
@@ -91,10 +91,10 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 	if (![fm fileExistsAtPath:imageCacheDirectory_ isDirectory:&isDirectory] || !isDirectory) {
 		[fm createDirectoryAtPath:imageCacheDirectory_ withIntermediateDirectories:YES attributes:nil error:NULL];
 	}
-	
+	#ifdef DROPBOX
 	dropboxClient_ = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
 	dropboxClient_.delegate = self;
-    
+#endif
     
 	importButton_ = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Import", @"Import")
                                                      style:UIBarButtonItemStyleDone target:self
@@ -128,7 +128,9 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 		NSString *lastPathVisited = [[NSUserDefaults standardUserDefaults] stringForKey:WDDropboxLastPathVisited];
 		if ([lastPathVisited isEqual:rootPath]) {
 			[activityIndicator_ startAnimating];
-			[dropboxClient_	loadMetadata:remotePath_];			
+            #ifdef DROPBOX
+			[dropboxClient_	loadMetadata:remotePath_];
+#endif
 			
 		} else if (lastPathVisited.length > 1) {
 			NSString *currentPath = rootPath;
@@ -150,7 +152,9 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 	// pushed or popped-to view controller
 	} else {
 		[activityIndicator_ startAnimating];
+        #ifdef DROPBOX
 		[dropboxClient_	loadMetadata:remotePath_];
+#endif
 	}
 }
 
@@ -213,7 +217,9 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
             
             if (!dropboxItemIcon || outOfDate) {
 				itemsKeyedByImagePath_[cachedImagePath] = dropboxItem;
+                #ifdef DROPBOX
 				[dropboxClient_ loadThumbnail:dropboxItem.path ofSize:kDropboxThumbSizeLarge intoPath:cachedImagePath];
+#endif
             }
 		}
         
@@ -253,7 +259,7 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 
 #pragma mark -
 #pragma mark DBRestClientDelegate
-
+#ifdef DROPBOX
 - (void)restClient:(DBRestClient*)client loadedMetadata:(DBMetadata*)metadata
 {	
     if (metadata.isDeleted) {
@@ -333,6 +339,7 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 		[dropboxClient_ loadThumbnail:itemRemotePath ofSize:kDropboxThumbSizeLarge intoPath:itemLocalPath];
 	}
 }
+#endif
 
 #pragma mark -
 #pragma mark Notifications
@@ -357,8 +364,8 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 
 - (void) unlinkDropbox:(id)sender
 {
-    WDAppDelegate *appDelegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
-    [appDelegate unlinkDropbox];
+//    WDAppDelegate *appDelegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+//    [appDelegate unlinkDropbox];
 }
 
 #pragma mark -
@@ -381,7 +388,7 @@ static NSString * const WDDropboxSubdirectoryMissingNotification = @"WDDropboxSu
 - (NSArray *)toolbarItems
 {
     UIBarButtonItem *flexibleSpaceItem = [UIBarButtonItem flexibleItem];
-    UIBarButtonItem *unlinkButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Unlink Dropbox", @"Unlink Dropbox") style:UIBarButtonItemStyleBordered target:self action:@selector(unlinkDropbox:)];
+    UIBarButtonItem *unlinkButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Unlink Dropbox", @"Unlink Dropbox") style:UIBarButtonItemStylePlain target:self action:@selector(unlinkDropbox:)];
 
     NSArray *toolbarItems = @[flexibleSpaceItem, unlinkButtonItem];
 

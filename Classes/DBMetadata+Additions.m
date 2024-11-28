@@ -11,7 +11,7 @@
 
 #import "DBMetadata+Additions.h"
 
-
+#ifdef DROPBOX
 @implementation DBMetadata (Additions)
 
 - (NSString *)description 
@@ -42,3 +42,4 @@
 }
 
 @end
+#endif

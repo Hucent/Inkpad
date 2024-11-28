@@ -26,7 +26,7 @@ NSString *WDDropboxFormatDefault = @"WDDropboxFormatDefault";
 - (NSArray *) formats
 {
     if (!formats_) {
-        formats_ = @[@"JPEG", @"PNG", @"SVG", @"SVGZ", @"PDF", @"Inkpad"];
+        formats_ = @[@"JPEG", @"PNG", @"SVG", @"SVGZ", @"PDF", @"ddraw"];
     }
 
     return formats_;
@@ -65,8 +65,8 @@ NSString *WDDropboxFormatDefault = @"WDDropboxFormatDefault";
 
 - (void) unlinkDropbox:(id)sender
 {
-    WDAppDelegate *appDelegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
-    [appDelegate unlinkDropbox];
+//    WDAppDelegate *appDelegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+//    [appDelegate unlinkDropbox];
 }
 
 - (void) setMode:(NSUInteger) mode

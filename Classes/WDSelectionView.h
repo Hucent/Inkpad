@@ -34,4 +34,5 @@
 
 - (void) drawView;
 
+- (void)shouldFinish;
 @end

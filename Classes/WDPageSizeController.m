@@ -43,7 +43,7 @@ static NSString *orientations_[] = { @"Portrait", @"Landscape" };
     
     self.navigationItem.title = NSLocalizedString(@"New Drawing", @"New Drawing");
     
-    NSString *settingsPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"PageSizes.plist"];
+    NSString *settingsPath = [[[NSBundle bundleForClass:[self class]] resourcePath] stringByAppendingPathComponent:@"PageSizes.plist"];
     configuration_ = [NSArray arrayWithContentsOfFile:settingsPath];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSizeChanged:) name:WDCustomDrawingSizeChanged object:nil];
@@ -205,7 +205,7 @@ static NSString *orientations_[] = { @"Portrait", @"Landscape" };
     
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [formatter setMaximumFractionDigits:2];
-    [formatter setRoundingMode:kCFNumberFormatterRoundCeiling];
+    [formatter setRoundingMode:(NSNumberFormatterRoundingMode)kCFNumberFormatterRoundCeiling];
     [formatter setUsesGroupingSeparator:NO];
     
     if (config[@"Custom"]) {

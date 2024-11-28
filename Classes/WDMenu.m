@@ -31,7 +31,7 @@
 @synthesize items = items_;
 @synthesize visible = visible_;
 @synthesize origin = origin_;
-@synthesize popover = popover_;
+//@synthesize popover = popover_;
 @synthesize delegate = delegate_;
 
 - (id) initWithItems:(NSArray *)items
@@ -147,9 +147,9 @@
 {
     [self setIndexOfSelectedItem:(-1)];
 
-    [popover_ dismissPopoverAnimated:YES];
+    //[popover_ dismissPopoverAnimated:YES];
     
-    [delegate_ popoverControllerDidDismissPopover:popover_];
+    //[delegate_ popoverControllerDidDismissPopover:popover_];
 }
 
 @end

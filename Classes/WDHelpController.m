@@ -21,14 +21,14 @@
         return nil;
     }
     
-    NSString *version = [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleVersionKey];
+    NSString *version = [[NSBundle bundleForClass:[self class]] infoDictionary][(NSString *)kCFBundleVersionKey];
     
     // don't need to localize the app name
     self.navigationItem.title = [NSString stringWithFormat:@"Inkpad %@", version];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]
                                              initWithTitle:NSLocalizedString(@"Print", @"Print")
-                                             style:UIBarButtonItemStyleBordered
+                                             style:UIBarButtonItemStylePlain
                                              target:self
                                              action:@selector(printContent:)];
     
@@ -42,16 +42,16 @@
 - (NSURL *) helpURL
 {
     NSString *resource = NSLocalizedString(@"index", @"Name of Help html file");
-    NSString *path = [[NSBundle mainBundle] pathForResource:resource ofType:@"html" inDirectory:@"Help"];
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:resource ofType:@"html" inDirectory:@"Help"];
     return [NSURL fileURLWithPath:path isDirectory:NO];
 }
 
 - (void)loadView
 {
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.view = webView;
-    [webView loadRequest:[NSURLRequest requestWithURL:[self helpURL]]];
+//    UIWebView *webView = [[UIWebView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//    webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    self.view = webView;
+//    [webView loadRequest:[NSURLRequest requestWithURL:[self helpURL]]];
 }
 
 - (void)dismissView:(id)sender
@@ -69,13 +69,13 @@
     printInfo.jobName = NSLocalizedString(@"Inkpad Help", @"Inkpad Help");
     pic.printInfo = printInfo;
 
-    UIViewPrintFormatter *viewFormatter = self.view.viewPrintFormatter;
-    viewFormatter.startPage = 0;
-    viewFormatter.contentInsets = UIEdgeInsetsMake(36.0, 36.0, 36.0, 36.0);
-    pic.printFormatter = viewFormatter;
-    pic.showsPageRange = YES;
-    
-    [pic presentFromBarButtonItem:sender animated:YES completionHandler:nil];
+//    UIViewPrintFormatter *viewFormatter = self.view.viewPrintFormatter;
+//    viewFormatter.startPage = 0;
+//    viewFormatter.contentInsets = UIEdgeInsetsMake(36.0, 36.0, 36.0, 36.0);
+//    pic.printFormatter = viewFormatter;
+//    pic.showsPageRange = YES;
+//    
+//    [pic presentFromBarButtonItem:sender animated:YES completionHandler:nil];
 }
 
 @end

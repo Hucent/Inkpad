@@ -60,7 +60,7 @@ NSString *WDAlignmentKey = @"WDAlignmentKey";
     [coder encodeObject:text_ forKey:WDTextKey];
     [coder encodeObject:fontName_ forKey:WDFontNameKey];
     [coder encodeFloat:fontSize_ forKey:WDFontSizeKey];
-    [coder encodeInt32:alignment_ forKey:WDAlignmentKey];
+    [coder encodeInt:((int)alignment_) forKey:WDAlignmentKey];
 }
 
 - (id)initWithCoder:(NSCoder *)coder
@@ -417,6 +417,20 @@ NSString *WDAlignmentKey = @"WDAlignmentKey";
     if ([text isEqualToString:text_]) {
         return;
     }
+
+    //UPDATE BY HUCENT
+    NSDictionary *attributes = @{NSFontAttributeName: [UIFont fontWithName:fontName_ size:fontSize_]};
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(MAXFLOAT, [self bounds].size.height)
+                                options:NSStringDrawingUsesLineFragmentOrigin
+                             attributes:attributes
+                                context:nil];
+
+    if(rect.size.width > 0) {
+
+        [self setWidth:rect.size.width];
+    }
+//    NSLog(@"WDText: %@ width:%f", text, rect.size.width);
+    //END UPDATE
     
     [self cacheDirtyBounds];
     
@@ -475,11 +489,14 @@ NSString *WDAlignmentKey = @"WDAlignmentKey";
 
 - (void) setWidthQuiet:(float)width
 {
+//    NSLog(@"WDText:setWidthQuiet %f", width);
     width_ = width;
 }
 
 - (void) setWidth:(float)width
 {
+
+//    NSLog(@"WDText:setWidth %f", width);
     [self cacheDirtyBounds];
     
     [(WDText *)[self.undoManager prepareWithInvocationTarget:self] setWidth:width_];
@@ -798,10 +815,10 @@ NSString *WDAlignmentKey = @"WDAlignmentKey";
         CTTextAlignment alignment;
         
         switch (alignment_) {
-            case NSTextAlignmentLeft: alignment = kCTLeftTextAlignment; break;
-            case NSTextAlignmentRight: alignment = kCTRightTextAlignment; break;
-            case NSTextAlignmentCenter: alignment = kCTCenterTextAlignment; break;
-            default: alignment = kCTLeftTextAlignment; break;
+            case NSTextAlignmentLeft: alignment = kCTTextAlignmentLeft; break;
+            case NSTextAlignmentRight: alignment = kCTTextAlignmentRight; break;
+            case NSTextAlignmentCenter: alignment = kCTTextAlignmentCenter; break;
+            default: alignment = kCTTextAlignmentLeft; break;
         }
 		
         CTParagraphStyleSetting settings[] = {

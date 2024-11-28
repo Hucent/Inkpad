@@ -139,6 +139,8 @@
 
 - (float) effectiveBackgroundGray;
 
+- (void) shouldFinish;
 @end
 
 extern NSString *WDCanvasBeganTrackingTouches;
+extern NSString *WDCanvasBeganTouches;

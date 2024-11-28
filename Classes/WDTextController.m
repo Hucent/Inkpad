@@ -90,5 +90,14 @@
     self.preferredContentSize = self.view.frame.size;
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if ([text isEqualToString:@"\n"]) {
+        [text_ resignFirstResponder];
+        return NO;
+
+    }
+    return YES;
+}
+
 
 @end

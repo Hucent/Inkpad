@@ -18,7 +18,7 @@
 @protocol WDPathPainter;
 
 @interface WDPropertyManager : NSObject {
-@private
+
     NSMutableSet        *invalidProperties_;
     NSMutableDictionary *defaults_;
 }

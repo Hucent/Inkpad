@@ -9,6 +9,7 @@
 //  Copyright (c) 2010-2013 Steve Sprang
 //
 
+
 #import "WDBezierNode.h"
 #import "WDCanvas.h"
 #import "WDDrawingController.h"
@@ -20,6 +21,7 @@
 #import "WDToolManager.h"
 #import "WDUtilities.h"
 #import "UIColor+Additions.h"
+#import "WDDynamicGuide.h"
 
 @implementation WDSelectionView
 
@@ -37,7 +39,8 @@
 }
 
 - (id)initWithFrame:(CGRect)frame
-{    
+{
+    NSLog(@"WDSelectionView initWithFrame");
     self = [super initWithFrame:frame];
     
     if (!self) {
@@ -193,6 +196,7 @@
 // Replace the implementation of this method to do your own custom drawing
 - (void) drawView
 {
+    NSLog(@"WDSelectionView drawView");
     [EAGLContext setCurrentContext:context];
     
     glMatrixMode(GL_PROJECTION);
@@ -288,6 +292,7 @@
 
 - (void)reshapeFramebuffer
 {
+    NSLog(@"WDSelectionView reshapeFramebuffer");
 	// Allocate color buffer backing based on the current layer size
     [context renderbufferStorage:GL_RENDERBUFFER_OES fromDrawable:(CAEAGLLayer*)self.layer];
     glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, colorRenderbuffer);
@@ -306,10 +311,24 @@
 }
 
 - (void)dealloc
-{        
+{
+    NSLog(@"WDSelectionView deadlloc");
+    [self shouldFinish];
+}
+
+- (void)shouldFinish {
+    [EAGLContext setCurrentContext:context];
+
+    glDeleteFramebuffersOES(1, &defaultFramebuffer);
+    defaultFramebuffer = 0;
+    glDeleteRenderbuffersOES(1, &colorRenderbuffer);
+    colorRenderbuffer = 0;
+    NSLog(@"WDSelectionView shouldFinish ");
     if ([EAGLContext currentContext] == context) {
         [EAGLContext setCurrentContext:nil];
     }
+    context = nil;
+//    [self removeFromSuperview];
 }
 
 - (WDDrawing *) drawing

@@ -31,6 +31,7 @@
 #import "WDText.h"
 #import "WDTextPath.h"
 #import "WDUtilities.h"
+#import "WDPath.h"
 
 const float kDuplicateOffset = 20.0f;
 

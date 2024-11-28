@@ -15,9 +15,10 @@
 #import "WDSVGParser.h"
 #import "WDSVGThumbnailExtractor.h"
 
-NSString *WDDrawingFileExtension = @"inkpad";
+NSString *WDDrawingFileExtension = @"ddraw";
 NSString *WDSVGFileExtension = @"svg";
-NSString *WDDefaultDrawingExtension = @"inkpad";
+NSString *WDDefaultDrawingExtension = @"ddraw";
+
 
 // notifications
 NSString *WDDrawingsDeleted = @"WDDrawingsDeleted";
@@ -246,6 +247,7 @@ NSString *WDDrawingNewFilenameKey = @"WDDrawingNewFilenameKey";
     NSURL *url = [NSURL fileURLWithPath:path];
     
     WDDocument *document = [[WDDocument alloc] initWithFileURL:url];
+    document.fileTypeOverride = @"com.measure.ddraw";
     document.drawing = drawing;
     [document saveToURL:url forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
         [[NSNotificationCenter defaultCenter] postNotificationName:WDDrawingAdded object:drawingName];
@@ -266,7 +268,7 @@ NSString *WDDrawingNewFilenameKey = @"WDDrawingNewFilenameKey";
 - (BOOL) createNewDrawingWithImage:(UIImage *)image imageName:(NSString *)imageName drawingName:(NSString *)drawingName
 {
     if (!image) {
-        return nil;
+        return NO;
     }
     
     image = [image downsampleWithMaxArea:4096*4096];
@@ -355,7 +357,7 @@ NSString *WDDrawingNewFilenameKey = @"WDDrawingNewFilenameKey";
     [doc openWithCompletionHandler:^(BOOL success) {
         dispatch_async([self importQueue], ^{
             if (success) {
-                doc.fileTypeOverride = @"com.taptrix.inkpad";
+                doc.fileTypeOverride = @"com.measure.ddraw";
                 NSString *svgName = [[url lastPathComponent] stringByDeletingPathExtension];
                 NSString *drawingName = [self uniqueFilenameWithPrefix:svgName extension:WDDefaultDrawingExtension];
                 NSString *path = [[WDDrawingManager drawingPath] stringByAppendingPathComponent:drawingName]; 
@@ -509,12 +511,12 @@ NSString *WDDrawingNewFilenameKey = @"WDDrawingNewFilenameKey";
     [fm createDirectoryAtPath:[WDDrawingManager drawingPath] withIntermediateDirectories:YES attributes:nil error:NULL];
     
     if (createSamples) {
-        NSArray *samplePaths = [[NSBundle mainBundle] pathsForResourcesOfType:WDDrawingFileExtension inDirectory:@"Samples"];
+        NSArray *samplePaths = [[NSBundle bundleForClass:[self class]] pathsForResourcesOfType:WDDrawingFileExtension inDirectory:@"Samples"];
         for (NSString *path in samplePaths) {
             [fm copyItemAtPath:path toPath:[[WDDrawingManager drawingPath] stringByAppendingPathComponent:[path lastPathComponent]] error:NULL];
         }
         
-        samplePaths = [[NSBundle mainBundle] pathsForResourcesOfType:WDSVGFileExtension inDirectory:@"Samples"];
+        samplePaths = [[NSBundle bundleForClass:[self class]] pathsForResourcesOfType:WDSVGFileExtension inDirectory:@"Samples"];
         for (NSString *path in samplePaths) {
             [fm copyItemAtPath:path toPath:[[WDDrawingManager drawingPath] stringByAppendingPathComponent:[path lastPathComponent]] error:NULL];
         }

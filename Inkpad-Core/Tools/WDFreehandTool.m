@@ -19,7 +19,7 @@
 #import "WDPath.h"
 #import "WDPropertyManager.h"
 #import "WDUtilities.h"
-
+#import <objc/runtime.h>
 #define kMaxError 10.0f
 
 NSString *WDDefaultFreehandTool = @"WDDefaultFreehandTool";
@@ -96,7 +96,12 @@ NSString *WDDefaultFreehandTool = @"WDDefaultFreehandTool";
         
         if (smoothPath) {
             smoothPath.fill = [canvas.drawingController.propertyManager activeFillStyle];
-            smoothPath.strokeStyle = [canvas.drawingController.propertyManager activeStrokeStyle];
+            WDStrokeStyle *strokeStyle = [canvas.drawingController.propertyManager activeStrokeStyle];
+            //UPDATE BY HUCENT 修正画箭头后画笔带箭头
+            Ivar var = class_getInstanceVariable([strokeStyle class], "endArrow_");
+            object_setIvar(strokeStyle,var,(nil));
+            smoothPath.strokeStyle = strokeStyle;
+            
             smoothPath.opacity = [[canvas.drawingController.propertyManager defaultValueForProperty:WDOpacityProperty] floatValue];
             smoothPath.shadow = [canvas.drawingController.propertyManager activeShadow];
             

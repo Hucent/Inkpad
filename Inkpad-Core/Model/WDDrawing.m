@@ -261,7 +261,7 @@ NSLog(@"Elements in drawing: %lu", (unsigned long)[self allElements].count);
     suppressNotifications_--;
     
     if (suppressNotifications_ < 0) {
-        NSLog(@"Unbalanced notification suppression: %d", (int) suppressNotifications_);
+//        NSLog(@"Unbalanced notification suppression: %d", (int) suppressNotifications_);
     }
 }
 

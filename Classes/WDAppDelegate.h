@@ -12,14 +12,14 @@
 #import <UIKit/UIKit.h>
 #import <DropboxSDK/DropboxSDK.h>
 
-@interface WDAppDelegate : NSObject <UIApplicationDelegate, DBSessionDelegate, UIAlertViewDelegate>
-
-@property (nonatomic, retain) UIWindow *window;
-@property (nonatomic, copy) void (^performAfterDropboxLoginBlock)(void);
-
-- (void) unlinkDropbox;
-
-@end
+//@interface WDAppDelegate : NSObject <UIApplicationDelegate, DBSessionDelegate, UIAlertViewDelegate>
+//
+//@property (nonatomic, retain) UIWindow *window;
+//@property (nonatomic, copy) void (^performAfterDropboxLoginBlock)(void);
+//
+//- (void) unlinkDropbox;
+//
+//@end
 
 extern NSString *WDDropboxWasUnlinkedNotification;
 

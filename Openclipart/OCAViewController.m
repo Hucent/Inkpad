@@ -250,7 +250,7 @@
 {
     NSArray *tokens = [searchBar.text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *searchTerm = [tokens componentsJoinedByString:@"+"];
-    searchTerm = [searchTerm stringByAddingPercentEscapesUsingEncoding:NSStringEncodingConversionAllowLossy];
+    //searchTerm = [searchTerm stringByAddingPercentEncodingWithAllowedCharacters:NSStringEncodingConversionAllowLossy];
 
     self.queryString = searchTerm;
     self.moreToLoad = YES;

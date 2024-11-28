@@ -1080,7 +1080,7 @@ NSString *WDClosedKey = @"WDClosedKey";
 - (NSSet *) transform:(CGAffineTransform)transform
 {
     NSMutableArray      *newNodes = [[NSMutableArray alloc] init];
-    BOOL                transformAll = [self anyNodesSelected] ? NO : YES;
+    BOOL                transformAll = ![self anyNodesSelected];
     NSMutableSet        *exchangedNodes = [NSMutableSet set];
     
     for (WDBezierNode *node in nodes_) {

@@ -8,7 +8,7 @@
 //
 //  Copyright (c) 2011-2013 Steve Sprang
 //
-
+#ifdef DROPBOX
 #import <DropboxSDK/DBMetadata.h>
 
 @interface DBMetadata (Additions)
@@ -16,3 +16,4 @@
 - (NSDictionary *)dictionaryRepresentation;
 
 @end
+#endif

@@ -55,12 +55,12 @@ NSString * const kWDPropertyVisibility       = @"visibility";
     stack_ = stack;
 
     painters_ = [[NSMutableDictionary alloc] init];
-    NSDictionary *colorWords = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"SVGColors" withExtension:@"plist"]];
+    NSDictionary *colorWords = [NSDictionary dictionaryWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"SVGColors" withExtension:@"plist"]];
     [colorWords enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop) {
         painters_[[key lowercaseString]] = [self resolvePainter:obj alpha:1.f];
         }];
         
-	NSArray *blendModeArray = [[NSArray alloc] initWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"BlendModes" withExtension:@"plist"]];
+	NSArray *blendModeArray = [[NSArray alloc] initWithContentsOfURL:[[NSBundle bundleForClass:[self class]] URLForResource:@"BlendModes" withExtension:@"plist"]];
     blendModeNames_ = [NSMutableDictionary dictionary];
     for (NSDictionary *dict in blendModeArray) {
         blendModeNames_[dict[@"name"]] = dict[@"value"];

@@ -129,7 +129,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
     // Create a help button to display in the top left corner.
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Help", @"Help")
-                                                                 style:UIBarButtonItemStyleBordered
+                                                                 style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(showHelp:)];
     self.navigationItem.leftBarButtonItem = leftItem;
@@ -172,14 +172,19 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
         [self dismissPopover];
     } else {
         pageSizeController_ = [[WDPageSizeController alloc] initWithNibName:nil bundle:nil];
-        UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:pageSizeController_];
+        //UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:pageSizeController_];
         
         pageSizeController_.target = self;
         pageSizeController_.action = @selector(createNewDrawing:);
         
-        popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-        popoverController_.delegate = self;
-        [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//        popoverController_ = [navController popoverPresentationController];
+//        popoverController_.delegate = self;
+//        popoverController_.permittedArrowDirections = UIPopoverArrowDirectionAny;
+//        popoverController_.barButtonItem = sender;
+//        [self presentViewController:navController animated:YES completion:nil];
+        //popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+        //popoverController_.delegate = self;
+        //[popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
     }
 }
 
@@ -241,9 +246,9 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:openClipArtController_];
     navController.toolbarHidden = NO;
     
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 #pragma mark - Camera
@@ -261,10 +266,10 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     pickerController_.sourceType = sourceType;
     pickerController_.delegate = self;
     
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:pickerController_];
+    //popoverController_ = [[UIPopoverController alloc] initWithContentViewController:pickerController_];
     
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+    //popoverController_.delegate = self;
+    //[popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) importFromAlbum:(id)sender
@@ -285,7 +290,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
-    [popoverController_ dismissPopoverAnimated:YES];
+    //[popoverController_ dismissPopoverAnimated:YES];
     popoverController_ = nil;
 }
 
@@ -306,12 +311,12 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     }
 }
 
-- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
-{
-    if (editingThumbnail_) {
-        [editingThumbnail_ stopEditing];
-    }
-}
+//- (void) willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+//{
+//    if (editingThumbnail_) {
+//        [editingThumbnail_ stopEditing];
+//    }
+//}
 
 - (void) keyboardWillShow:(NSNotification *)aNotification
 {
@@ -337,7 +342,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     }
     
     blockingView_ = [[WDBlockingView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+    id<UIApplicationDelegate>delegate = [UIApplication sharedApplication].delegate;
     
     blockingView_.passthroughViews = @[editingThumbnail_.titleField];
     [delegate.window addSubview:blockingView_];
@@ -355,7 +360,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (blockingView_ && editingThumbnail_) {
-        WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+        id<UIApplicationDelegate> delegate = [UIApplication sharedApplication].delegate;
         CGPoint shadowCenter = [self.collectionView convertPoint:editingThumbnail_.center toView:delegate.window];
         [blockingView_ setShadowCenter:shadowCenter radius:kEditingHighlightRadius];
     }
@@ -441,39 +446,39 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (void) deleteSelectedDrawings
 {
-    NSString *format = NSLocalizedString(@"Delete %d Drawings", @"Delete %d Drawings");
-    NSString *title = (selectedDrawings_.count) == 1 ? NSLocalizedString(@"Delete Drawing", @"Delete Drawing") :
-    [NSString stringWithFormat:format, selectedDrawings_.count];
-    
-    NSString *message;
-    
-    if (selectedDrawings_.count == 1) {
-        message = NSLocalizedString(@"Once deleted, this drawing cannot be recovered.", @"Alert text when deleting 1 drawing");
-    } else {
-        message = NSLocalizedString(@"Once deleted, these drawings cannot be recovered.", @"Alert text when deleting multiple drawings");
-    }
-    
-    NSString *deleteButtonTitle = NSLocalizedString(@"Delete", @"Delete");
-    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
+//    NSString *format = NSLocalizedString(@"Delete %d Drawings", @"Delete %d Drawings");
+//    NSString *title = (selectedDrawings_.count) == 1 ? NSLocalizedString(@"Delete Drawing", @"Delete Drawing") :
+//    [NSString stringWithFormat:format, selectedDrawings_.count];
+//
+//    NSString *message;
+//
+//    if (selectedDrawings_.count == 1) {
+//        message = NSLocalizedString(@"Once deleted, this drawing cannot be recovered.", @"Alert text when deleting 1 drawing");
+//    } else {
+//        message = NSLocalizedString(@"Once deleted, these drawings cannot be recovered.", @"Alert text when deleting multiple drawings");
+//    }
+//
+//    NSString *deleteButtonTitle = NSLocalizedString(@"Delete", @"Delete");
+//    NSString *cancelButtonTitle = NSLocalizedString(@"Cancel", @"Cancel");
 
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:deleteButtonTitle, cancelButtonTitle, nil];
-    alertView.cancelButtonIndex = 1;
-    
-    [alertView show];
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+//                                                        message:message
+//                                                       delegate:self
+//                                              cancelButtonTitle:nil
+//                                              otherButtonTitles:deleteButtonTitle, cancelButtonTitle, nil];
+//    alertView.cancelButtonIndex = 1;
+//
+//    [alertView show];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == alertView.cancelButtonIndex) {
-        return;
-    }
-    
-    [[WDDrawingManager sharedInstance] deleteDrawings:selectedDrawings_];
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//    if (buttonIndex == alertView.cancelButtonIndex) {
+//        return;
+//    }
+//
+//    [[WDDrawingManager sharedInstance] deleteDrawings:selectedDrawings_];
+//}
 
 - (void) showDeleteMenu:(id)sender
 {
@@ -484,27 +489,27 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     
     [self dismissPopover];
     
-    NSString *format = NSLocalizedString(@"Delete %d Drawings", @"Delete %d Drawings");
-    NSString *title = (selectedDrawings_.count) == 1 ?
-        NSLocalizedString(@"Delete Drawing", @"Delete Drawing") :
-        [NSString stringWithFormat:format, selectedDrawings_.count];
+//    NSString *format = NSLocalizedString(@"Delete %d Drawings", @"Delete %d Drawings");
+//    NSString *title = (selectedDrawings_.count) == 1 ?
+//        NSLocalizedString(@"Delete Drawing", @"Delete Drawing") :
+//        [NSString stringWithFormat:format, selectedDrawings_.count];
     
-	deleteSheet_ = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@""
-                                 destructiveButtonTitle:title otherButtonTitles:nil];
-
-    [deleteSheet_ showFromBarButtonItem:sender animated:YES];
+//	deleteSheet_ = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@""
+//                                 destructiveButtonTitle:title otherButtonTitles:nil];
+//
+//    [deleteSheet_ showFromBarButtonItem:sender animated:YES];
 }
      
- - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (actionSheet == deleteSheet_) {
-        if (buttonIndex == actionSheet.destructiveButtonIndex) {
-            [self deleteSelectedDrawings];
-        }
-    }
-    
-    deleteSheet_ = nil;
-}
+// - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+//{
+//    if (actionSheet == deleteSheet_) {
+//        if (buttonIndex == actionSheet.destructiveButtonIndex) {
+//            [self deleteSelectedDrawings];
+//        }
+//    }
+//
+//    deleteSheet_ = nil;
+//}
 
 #pragma mark - Editing
 
@@ -566,7 +571,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     if ([MFMailComposeViewController canSendMail]) {
         if (!emailItem_) {
             emailItem_ = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Email", @"Email")
-                                                          style:UIBarButtonItemStyleBordered
+                                                          style:UIBarButtonItemStylePlain
                                                          target:self
                                                          action:@selector(showEmailPanel:)];
         }
@@ -576,7 +581,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     
     if (!dropboxExportItem_) {
         dropboxExportItem_ = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Dropbox", @"Dropbox")
-                                                              style:UIBarButtonItemStyleBordered
+                                                              style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(showDropboxExportPanel:)];
     }
@@ -606,10 +611,10 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
         toolbarItems_ = [[NSMutableArray alloc] init];
         
         UIBarButtonItem *importItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Import", @"Import")
-                                                                       style:UIBarButtonItemStyleBordered target:self
+                                                                       style:UIBarButtonItemStylePlain target:self
                                                                       action:@selector(showDropboxImportPanel:)];
         UIBarButtonItem *samplesItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Samples", @"Samples")
-                                                                        style:UIBarButtonItemStyleBordered
+                                                                        style:UIBarButtonItemStylePlain
                                                                        target:self
                                                                        action:@selector(showSamplesPanel:)];
         
@@ -620,14 +625,14 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
         UIBarButtonItem *spinnerItem = [[UIBarButtonItem alloc] initWithCustomView:activityIndicator_];
         
         activityItem_ = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Activity", @"Activity")
-                                                         style:UIBarButtonItemStyleBordered target:self
+                                                         style:UIBarButtonItemStylePlain target:self
                                                         action:@selector(showActivityPanel:)];
         
         UIBarButtonItem *editItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Select", @"Select")
-                                                                     style:UIBarButtonItemStyleBordered
+                                                                     style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(startEditing:)];
-        editItem.style = UIBarButtonItemStyleBordered;
+        editItem.style = UIBarButtonItemStylePlain;
         
         UIBarButtonItem *flexibleItem = [UIBarButtonItem flexibleItem];
         UIBarButtonItem *fixedItem = [UIBarButtonItem fixedItemWithWidth:10];
@@ -661,11 +666,11 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     
     fontLibraryController_ = [[WDFontLibraryController alloc] initWithNibName:nil bundle:nil];
 
-    UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:fontLibraryController_];
+    //UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:fontLibraryController_];
     
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) samplesController:(WDSamplesController *)controller didSelectURLs:(NSArray *)sampleURLs
@@ -688,11 +693,11 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     samplesController_.title = NSLocalizedString(@"Samples", @"Samples");
     samplesController_.delegate = self;
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:samplesController_];
+    //UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:samplesController_];
     
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) showActivityPanel:(id)sender
@@ -707,11 +712,11 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     activityController_ = [[WDActivityController alloc] initWithNibName:nil bundle:nil];
     activityController_.activityManager = activities_;
     
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:activityController_];
+    //UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:activityController_];
     
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) activityCountChanged:(NSNotification *)aNotification
@@ -759,10 +764,10 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (void) dismissPopoverAnimated:(BOOL)animated
 {
-    if (popoverController_) {
-        [popoverController_ dismissPopoverAnimated:animated];
-        popoverController_ = nil;
-    }
+//    if (popoverController_) {
+//        [popoverController_ dismissPopoverAnimated:animated];
+//        popoverController_ = nil;
+//    }
     
     exportController_ = nil;
     importController_ = nil;
@@ -771,10 +776,10 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     samplesController_ = nil;
     activityController_ = nil;
     
-    if (deleteSheet_) {
-        [deleteSheet_ dismissWithClickedButtonIndex:deleteSheet_.cancelButtonIndex animated:NO];
-        deleteSheet_ = nil;
-    }
+//    if (deleteSheet_) {
+//        [deleteSheet_ dismissWithClickedButtonIndex:deleteSheet_.cancelButtonIndex animated:NO];
+//        deleteSheet_ = nil;
+//    }
 }
 
 - (void) dismissPopover
@@ -782,19 +787,19 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     [self dismissPopoverAnimated:NO];
 }
 
-- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
-{
-    if (popoverController == popoverController_) {
-        popoverController_ = nil;
-    }
-    
-    exportController_ = nil;
-    importController_ = nil;
-    pickerController_ = nil;
-    fontLibraryController_ = nil;
-    samplesController_ = nil;
-    activityController_ = nil;
-}
+//- (void) popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+//{
+//    if (popoverController == popoverController_) {
+//        popoverController_ = nil;
+//    }
+//
+//    exportController_ = nil;
+//    importController_ = nil;
+//    pickerController_ = nil;
+//    fontLibraryController_ = nil;
+//    samplesController_ = nil;
+//    activityController_ = nil;
+//}
 
 - (void)didDismissModalView {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -890,11 +895,11 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     exportController_.action = @selector(emailDrawings:);
     exportController_.target = self;
     
-    UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:exportController_];
-    
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:exportController_];
+//
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 #pragma mark - Dropbox
@@ -902,7 +907,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 - (void) uploadDrawings:(id)sender
 {
     [self dismissPopover];
-    
+    #ifdef DROPBOX
     if (!restClient_) {
         restClient_ = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
         restClient_.delegate = self;
@@ -946,7 +951,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
             }
         }];
     }
-    
+#endif
     [self properlyEnableToolbarItems];
 }
 
@@ -965,18 +970,19 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
     exportController_.action = @selector(uploadDrawings:);
     exportController_.target = self;
     
-    UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:exportController_];
-    
-    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-    popoverController_.delegate = self;
-    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//    UINavigationController  *navController = [[UINavigationController alloc] initWithRootViewController:exportController_];
+//
+//    popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//    popoverController_.delegate = self;
+//    [popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) showDropboxExportPanel:(id)sender
 {
 	if (![self dropboxIsLinked]) {
-        WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
-        delegate.performAfterDropboxLoginBlock = ^{ [self reallyShowDropboxExportPanel:sender]; };
+        //UPDATE BY HUCENT
+//        WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+//        delegate.performAfterDropboxLoginBlock = ^{ [self reallyShowDropboxExportPanel:sender]; };
 	} else {
         [self reallyShowDropboxExportPanel:sender];
     }
@@ -997,18 +1003,19 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 	importController_.title = @"Dropbox";
 	importController_.delegate = self;
 	
-	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:importController_];
-	
-	popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
-	popoverController_.delegate = self;
-	[popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
+//	UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:importController_];
+//
+//	popoverController_ = [[UIPopoverController alloc] initWithContentViewController:navController];
+//	popoverController_.delegate = self;
+//	[popoverController_ presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:NO];
 }
 
 - (void) showDropboxImportPanel:(id)sender
 {
     if (![self dropboxIsLinked]) {
-        WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
-        delegate.performAfterDropboxLoginBlock = ^{ [self reallyShowDropboxImportPanel:sender]; };
+        //UPDATE BY HUCENT
+//        WDAppDelegate *delegate = (WDAppDelegate *) [UIApplication sharedApplication].delegate;
+//        delegate.performAfterDropboxLoginBlock = ^{ [self reallyShowDropboxImportPanel:sender]; };
 	} else {
         [self reallyShowDropboxImportPanel:sender];
     }
@@ -1016,6 +1023,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (void) importController:(WDImportController *)controller didSelectDropboxItems:(NSArray *)dropboxItems
 {
+    #ifdef DROPBOX
 	if (!restClient_) {
 		restClient_ = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
 		restClient_.delegate = self;
@@ -1037,7 +1045,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
             [activities_ addActivity:[WDActivity activityWithFilePath:downloadPath type:WDActivityTypeDownload]];
         }
 	}
-	
+#endif
 	[self dismissPopover];
 }
 
@@ -1045,26 +1053,26 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (void) showImportErrorMessage:(NSString *)filename
 {
-    NSString *format = NSLocalizedString(@"Inkpad could not import “%@”. It may be corrupt or in a format that's not supported.",
-                                         @"Inkpad could not import “%@”. It may be corrupt or in a format that's not supported.");
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Import Problem", @"Import Problem")
-                                                        message:[NSString stringWithFormat:format, filename]
-                                                       delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
-                                              otherButtonTitles:nil];
-    [alertView show];
+//    NSString *format = NSLocalizedString(@"Inkpad could not import “%@”. It may be corrupt or in a format that's not supported.",
+//                                         @"Inkpad could not import “%@”. It may be corrupt or in a format that's not supported.");
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Import Problem", @"Import Problem")
+//                                                        message:[NSString stringWithFormat:format, filename]
+//                                                       delegate:nil
+//                                              cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
+//                                              otherButtonTitles:nil];
+//    [alertView show];
 }
 
 - (void) showImportMemoryWarningMessage:(NSString *)filename
 {
-    NSString *format = NSLocalizedString(@"Inkpad could not import “%@”. There is not enough available memory.",
-                                         @"Inkpad could not import “%@”. There is not enough available memory.");
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Import Problem", @"Import Problem")
-                                                        message:[NSString stringWithFormat:format, filename]
-                                                       delegate:nil
-                                              cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
-                                              otherButtonTitles:nil];
-    [alertView show];
+//    NSString *format = NSLocalizedString(@"Inkpad could not import “%@”. There is not enough available memory.",
+//                                         @"Inkpad could not import “%@”. There is not enough available memory.");
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Import Problem", @"Import Problem")
+//                                                        message:[NSString stringWithFormat:format, filename]
+//                                                       delegate:nil
+//                                              cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
+//                                              otherButtonTitles:nil];
+//    [alertView show];
 }
 
 #pragma mark -
@@ -1086,6 +1094,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
 
 - (BOOL) dropboxIsLinked
 {
+    #ifdef DROPBOX
     if ([[DBSession sharedSession] isLinked]) {
         return YES;
     } else {
@@ -1094,10 +1103,12 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
         [[DBSession sharedSession] linkUserId:nil fromController:self];
         return NO;
     }
+#endif
+    return NO;
 }
 
 #pragma mark -
-
+#ifdef DROPBOX
 - (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath from:(NSString*)srcPath
 {
     [filesBeingUploaded_ removeObject:srcPath];
@@ -1196,7 +1207,7 @@ NSString *WDAttachmentNotification = @"WDAttachmentNotification";
                                               otherButtonTitles:nil];
     [alertView show];
 }
-
+#endif
 #pragma mark - Storyboard / Collection View
 
 - (BOOL) shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
